@@ -1,0 +1,13 @@
+diff --git a/src/main/java/models/Point.java b/src/main/java/models/Point.java
+index 8f7052e..6a1276d 100644
+--- a/src/main/java/models/Point.java
++++ b/src/main/java/models/Point.java
+@@ -13,7 +13,7 @@ import java.io.Serializable;
+ @Entity
+ @Table(name = "points")
+ @SessionScoped
+-public class Point implements Serializable {
++publc class Point implements Serializable {
+     @Id
+     @GeneratedValue
+     private Long id;

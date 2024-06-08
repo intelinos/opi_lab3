@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+
+<html lang="ru"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <h:outputScript name="dots/scripts/CanvasPrinter.js"/>
+    <h:outputScript name="dots/scripts/onetime.js"/>
+
+    <!-- Библиотека компиляции less -->
+    <link rel="stylesheet/less" type="text/css" href="resources/dots/styles/styles.less" />
+    <script src="https://cdn.jsdelivr.net/npm/less" ></script>
+
+    <!-- Библиотека SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <title>Гайдеров Ярослав | Веб программиирование</title>
+</h:head>
+
+<h:body>
+    <header>
+        <h1>Гайдеров Ярослав. 3231 Вариант 846274</h1>
+    </header>
+
+    <div id="main-container">
+        <div id="form-container">
+            <h:form id="form" onsubmit="">
+                        <!-- Контейнер для X-->
+                <div class="input-container" id="X-input-container">
+                    <p:outputLabel styleClass="form-label" for="@next" value="Выберите X:"/>
+                    <h:selectBooleanCheckbox class="pointer checkbox"
+                                             valueChangeListener="#{pointHandler.point.updateX}"
+                                             id="value-3">
+                        <f:ajax/>
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="value-3">-3</h:outputLabel>
+
+                    <h:selectBooleanCheckbox class="pointer checkbox"
+                                             valueChangeListener="#{pointHandler.point.updateX}"
+                                             id="value-2">
+                        <f:ajax/>
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="value-2">-2</h:outputLabel>
+
+                    <h:selectBooleanCheckbox class="pointer checkbox"
+                                             valueChangeListener="#{pointHandler.point.updateX}"
+                                             id="value-1">
+                        <f:ajax/>
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="value-1">-1</h:outputLabel>
+
+                    <h:selectBooleanCheckbox class="pointer checkbox"
+                                             valueChangeListener="#{pointHandler.point.updateX}"
+                                             id="value0">
+                        <f:ajax/>
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="value0">0</h:outputLabel>
+                    <h:selectBooleanCheckbox class="pointer checkbox"
+                                             valueChangeListener="#{pointHandler.point.updateX}"
+                                             id="value1">
+                        <f:ajax/>
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="value1">1</h:outputLabel>
+
+                    <h:selectBooleanCheckbox class="pointer checkbox"
+                                             valueChangeListener="#{pointHandler.point.updateX}"
+                                             id="value2">
+                        <f:ajax/>
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="value2">2</h:outputLabel>
+
+                    <h:selectBooleanCheckbox class="pointer checkbox"
+                                             valueChangeListener="#{pointHandler.point.updateX}"
+                                             id="value3">
+                        <f:ajax/>
+                    </h:selectBooleanCheckbox>
+                    <h:outputLabel for="value3">3</h:outputLabel>
+                </div>
+
+                        <!-- Контейнер для Y -->
+                <div class="input-container" id="Y-input-container">
+                    <p:outputLabel styleClass="form-label" for="@next" value="Выберите Y:"/>
+                    <h:inputText id="Y-input"
+                                 name="Y-input"
+                                 type="text"
+                                 value="#{pointHandler.point.y}"
+                                 styleClass="Y-input input-area"
+                                 required="true"
+                                 maxlength="6"
+                                 requiredMessage="Введите Y"
+                                 validatorMessage="Не входит в [-3..3]"
+                                 converterMessage="Введите число">
+                        <f:validateDoubleRange minimum="-3" maximum="3"/>
+                        <f:ajax render="Y-value-message"/>
+                    </h:inputText>
+                    <h:message for="Y-input" id="Y-value-message"/>
+                </div>
+
+                <!-- Контейнер для R -->
+                <div class="input-container" id="R-input-container">
+                    <p:outputLabel styleClass="form-label" for="@next" value="Выберите R:"/>
+                    <h:inputText id="R-value"
+                                 styleClass="input-area"
+                                 value="#{pointHandler.point.r}"
+                                 onchange="canvasPrinter.redrawAll(getR())"
+                                 required="true"
+                                 requiredMessage="Введите R"
+                                 validatorMessage="Не входит в [1..4]"
+                                 converterMessage="Введите число">
+                        <f:validateDoubleRange minimum="1" maximum="4"/>
+                        <f:ajax render="R-value-message"/>
+                    </h:inputText>
+                    <h:message id="R-value-message" for="R-value" styleClass="error"/>
+                </div>
+
+                        <!-- Кнопочки -->
+                <div class="input-container" id="buttons-container">
+                    <h:button value="Назад" styleClass="surfing-button main-button" outcome="go-to-index" id="go_to_index_button"/>
+                    <h:commandButton type="submit"
+                                     id="check"
+                                     styleClass="main-button"
+                                     value="Проверить"
+                                     action="#{pointHandler.add()}">
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </div>
+
+            <!-- Контейнер для графика -->
+        <div id="graph-container">
+            <canvas id="graph" width="300" height="300"/>
+        </div>
+
+                <!-- Контейнер для таблицы -->
+        <div class="table-container">
+            <h:dataTable id="table" styleClass="main-table" value="#{pointHandler.points}" var="point" >
+                <p:remoteCommand name=""/>
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    <h:outputText id="x" value="#{point.x}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Y</f:facet>
+                    <h:outputText id="y" value="#{point.y}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">R</f:facet>
+                    <h:outputText id="r" value="#{point.r}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Результат</f:facet>
+                    <h:outputText styleClass="#{point.statusHTMLClass}" id="status" value="#{point.statusString}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Текущее время</f:facet>
+                    <h:outputText id="time" value="#{point.time}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Время работы (мкс)</f:facet>
+                    <h:outputText id="script-time" value="#{point.scriptTime}"/>
+                </h:column>
+            </h:dataTable>
+        </div>
+
+    </div>
+    <h:panelGroup id="graphPanel">
+        <h:outputScript>
+            canvasPrinter.redrawAll(getR());
+        </h:outputScript>
+    </h:panelGroup>
+
+    <p:remoteCommand name="addAttempt" action="#{pointHandler.addFromJS()}" update="table" process="@this"/>
+    <p:remoteCommand name="updateGraph" update="graphPanel" process="@this"/>
+    <p:remoteCommand name="checkUpdate" action="#{pointHandler.loadPointsFromDb()}" process="@this"/>
+</h:body>
+</html>
